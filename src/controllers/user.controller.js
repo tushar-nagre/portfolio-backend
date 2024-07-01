@@ -1,13 +1,20 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { User } from "../models/user.model.js"
+import { Visitor } from "../models/visitors.model.js";
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
         console.log(`registerUser API accessed | ${req.originalUrl}`);
 
-        const { username, name, email, countryCode, phoneNumber, password, designation } = req.body
-
-        console.log(username, name, email, countryCode, phoneNumber, password, designation);
+        const {
+            username,
+            name,
+            email,
+            countryCode,
+            phoneNumber,
+            password,
+            designation
+        } = req.body
 
         const userExistCheck = await User.findOne({ $or: [{ username }, { email }] })
 
@@ -39,42 +46,30 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 })
 
-const getInTouch = asyncHandler(async (req, res) => {
+const registerVisitor = asyncHandler(async (req, res) => {
     try {
-        console.log(`getInTouch API has accessed | ${req.originalUrl}`);
+        console.log(`getInTouch API accessed | ${req.originalUrl}`);
 
-        const { username, name, email, countryCode, phoneNumber, password, designation } = req.body
+        const { name, email, phoneNumber, designation } = req.body
 
-        console.log(username, name, email, countryCode, phoneNumber, password, designation);
-
-        const userExistCheck = await User.findOne({ $or: [{ username }, { email }] })
+        const userExistCheck = await User.findOne({ email })
 
         if (userExistCheck) {
             return res.badRequest("User with this email or username already existed.");
         }
 
-        const user = await User.create({
-            username,
-            email,
+        const visitor = await Visitor.create({
             name,
-            countryCode,
+            email,
             phoneNumber,
-            password,
             designation
         });
 
-        const checkUserCreated = await User.findById(user._id)
-            .select("-password -refreshToken")
-
-        if (!checkUserCreated) {
-            return res.badRequest("Faild to create user, Please try agin later.");
-        }
-
-        return res.success(true, "User created succesfully.");
+        return res.success(true, "Tushar will contact with you soon, Till then have a look on my projects section");
     } catch (error) {
-        console.log("Error in register user API.");
+        console.log("Error in getInTouch API.");
         return res.error(error.stack);
     }
 })
 
-export { registerUser }
+export { registerUser, registerVisitor }

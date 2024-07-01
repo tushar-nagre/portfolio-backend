@@ -22,13 +22,29 @@ export const registrationPayload = Joi.object({
         .required(),
 
     phoneNumber: Joi.string()
-        .min(5)
+        .min(10)
         .required(),
 
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
 
     designation: Joi.string()
-        .valid("Developer", "Geeky", "Bussiness Owner")
+        .valid("Developer", "Geeky Student", "Bussiness Owner", "HR")
         .required()
+});
+
+export const registerVisitorPayload = Joi.object({
+    name: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(20)
+        .required(),
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    phoneNumber: Joi.string()
+        .min(10)
+        .required(),
+    designation: Joi.string()
+        .valid("Developer", "Geeky Student", "Bussiness Owner", "HR")
+        .required(),
 });
