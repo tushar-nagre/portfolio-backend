@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import ResponseHelper from './helpers/response.helper.js';
+import route from "./routes/index.js";
 
 const app = express()
 
@@ -12,12 +13,8 @@ app.use(express.static("public"))
 app.use(cookieParser())
 new ResponseHelper().init(app);
 
-// routes import
-import userRouter from './routes/user.routes.js'
-import projectRouter from './routes/project.routes.js'
 
 // routes declaration
-app.use("/api/v1/users", userRouter)
-app.use("/api/v1/project", projectRouter)
+app.use("/api/v1", route)
 
 export { app } 
